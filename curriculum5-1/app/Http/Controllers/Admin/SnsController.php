@@ -7,7 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-use App\Sns;
+use App\Posts;
 use App\User;
 
 class SnsController extends Controller
@@ -20,9 +20,9 @@ class SnsController extends Controller
     public function create(Request $request)
     {
         // Varidationを行う
-        $this->validate($request, Sns::$rules);
+        $this->validate($request, Posts::$rules);
 
-        $sns = new Sns;
+        $sns = new Posts;
         $form = $request->all();
 
         // フォームから送信されてきた_tokenを削除する
@@ -43,7 +43,7 @@ class SnsController extends Controller
 
     public function index(Request $request)
     {
-        $posts = Sns::orderBy('id', 'desc')->get();
+        $posts = Posts::orderBy('id', 'desc')->get();
         $user = new User;
         return view('admin.sns.index', ['posts' => $posts, 'user' => $user]);
     }
@@ -51,7 +51,7 @@ class SnsController extends Controller
     public function delete(Request $request)
     {
         // 該当するSns Modelを取得
-        $sns = Sns::find($request->id);
+        $sns = Posts::find($request->id);
         if(Auth::id() === $sns->user_id){
             // 削除する
             $sns->delete();
